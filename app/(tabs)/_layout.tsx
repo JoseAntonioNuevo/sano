@@ -1,35 +1,63 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
+import { Tabs } from "expo-router";
+import { Text } from "react-native";
+import React, { useMemo } from "react";
 
-import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+function TabBarIcon({ label }: { label: string }) {
+  return <Text className="text-xs">{label}</Text>;
+}
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+const HomeIcon = () => <TabBarIcon label="🏠" />;
+const CheckInIcon = () => <TabBarIcon label="📝" />;
+const PlanIcon = () => <TabBarIcon label="✓" />;
+const QuestionnaireIcon = () => <TabBarIcon label="📋" />;
+const HistoryIcon = () => <TabBarIcon label="📊" />;
+
+const tabScreenOptions = {
+  headerShown: true,
+  headerStyle: {
+    backgroundColor: "#2563EB",
+  },
+  headerTintColor: "#fff",
+  headerTitleStyle: {
+    fontWeight: "600",
+  },
+  tabBarActiveTintColor: "#2563EB",
+  tabBarInactiveTintColor: "#6B7280",
+} as const;
+
+export default function TabsLayout() {
+  const homeOptions = useMemo(() => ({
+    title: "Home",
+    tabBarIcon: HomeIcon,
+  }), []);
+
+  const checkinOptions = useMemo(() => ({
+    title: "Check-in",
+    tabBarIcon: CheckInIcon,
+  }), []);
+
+  const planOptions = useMemo(() => ({
+    title: "Plan",
+    tabBarIcon: PlanIcon,
+  }), []);
+
+  const questionnaireOptions = useMemo(() => ({
+    title: "Questionnaire",
+    tabBarIcon: QuestionnaireIcon,
+  }), []);
+
+  const historyOptions = useMemo(() => ({
+    title: "History",
+    tabBarIcon: HistoryIcon,
+  }), []);
 
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
+    <Tabs screenOptions={tabScreenOptions}>
+      <Tabs.Screen name="index" options={homeOptions} />
+      <Tabs.Screen name="checkin" options={checkinOptions} />
+      <Tabs.Screen name="plan" options={planOptions} />
+      <Tabs.Screen name="questionnaire" options={questionnaireOptions} />
+      <Tabs.Screen name="history" options={historyOptions} />
     </Tabs>
   );
 }
